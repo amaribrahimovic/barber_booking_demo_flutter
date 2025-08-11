@@ -48,7 +48,6 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
       ).showSnackBar(SnackBar(content: Text('Error: $e')));
 
-      // remove later
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('jwt_token');
     } finally {

@@ -15,20 +15,17 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   final CalendarController _calendarController = CalendarController();
   List<Appointment> _appointments = [];
-  Map<Appointment, String> _appointmentIdMap =
-      {}; // Map to store appointment IDs
+  Map<Appointment, String> _appointmentIdMap = {};
   DateTime _selectedDate = DateTime.now();
   bool _isLoading = false;
   String? _alertMessage;
   Color? _alertColor;
 
-  // Customer autocomplete state
   List<Map<String, dynamic>> _customers = [];
   List<Map<String, dynamic>> _filteredCustomers = [];
   String _searchTerm = '';
   Map<String, dynamic>? _selectedCustomer;
 
-  // Backend URL
   static const String backendUrl = 'http://192.168.0.25:3210/api';
 
   @override
@@ -87,7 +84,6 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   String _formatDateWithTimezone(DateTime dateTime) {
-    // Get the timezone offset
     final offset = dateTime.timeZoneOffset;
     final offsetSign = offset.isNegative ? '-' : '+';
     final offsetHours = offset.abs().inHours.toString().padLeft(2, '0');
@@ -96,15 +92,12 @@ class _BookingScreenState extends State<BookingScreen> {
       '0',
     );
 
-    // Format the date with timezone information
     return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}T${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}$offsetSign$offsetHours:$offsetMinutes';
   }
 
   DateTime _parseDateFromBackend(String dateString) {
-    // Parse the date string and convert to local time if needed
     DateTime parsedDate = DateTime.parse(dateString);
 
-    // If the parsed date is in UTC, convert it to local time
     if (parsedDate.isUtc) {
       return parsedDate.toLocal();
     }
@@ -163,11 +156,9 @@ class _BookingScreenState extends State<BookingScreen> {
           _isLoading = false;
         });
       } else {
-        // Fallback to sample data if API fails
         _loadSampleAppointments();
       }
     } catch (e) {
-      // Fallback to sample data if there's an error
       _loadSampleAppointments();
     }
   }
@@ -260,7 +251,6 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   void _showAddAppointmentDialog(DateTime selectedDateTime) {
-    // Reset state for new dialog
     _selectedCustomer = null;
     _searchTerm = '';
     _filteredCustomers = [];
@@ -303,7 +293,6 @@ class _BookingScreenState extends State<BookingScreen> {
                       style: TextStyle(color: Colors.white),
                     ),
                     const SizedBox(height: 8),
-                    // Customer Autocomplete
                     _buildCustomerAutocomplete(setDialogState),
                   ],
                 ),
@@ -467,7 +456,6 @@ class _BookingScreenState extends State<BookingScreen> {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('jwt_token');
 
-      // Create the appointment with the selected customer
       final appointmentResponse = await http.post(
         Uri.parse('$backendUrl/appointments'),
         headers: {
@@ -644,7 +632,6 @@ class _BookingScreenState extends State<BookingScreen> {
       _selectedIndex = index;
     });
     if (index == 0) {
-      // Already on BookingScreen
     } else if (index == 1) {
       Navigator.pushReplacement(
         context,
@@ -670,7 +657,6 @@ class _BookingScreenState extends State<BookingScreen> {
         children: [
           Column(
             children: [
-              // Navigation buttons
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -687,9 +673,7 @@ class _BookingScreenState extends State<BookingScreen> {
                           style: IconButton.styleFrom(
                             backgroundColor: Colors.green[700],
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                8,
-                              ), // Lowered border radius
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                         ),
@@ -702,9 +686,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             backgroundColor: Colors.green[700],
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                8,
-                              ), // Lowered border radius
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                         ),
@@ -720,9 +702,7 @@ class _BookingScreenState extends State<BookingScreen> {
                             backgroundColor: Colors.green[700],
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                8,
-                              ), // Lowered border radius
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                         ),
@@ -736,9 +716,7 @@ class _BookingScreenState extends State<BookingScreen> {
                           style: IconButton.styleFrom(
                             backgroundColor: Colors.green[700],
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                8,
-                              ), // Lowered border radius
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                         ),
@@ -747,7 +725,6 @@ class _BookingScreenState extends State<BookingScreen> {
                   ],
                 ),
               ),
-              // Calendar
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 16),
